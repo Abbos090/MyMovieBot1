@@ -7,6 +7,7 @@ from config import ADMINS
 from Keyboards.add_remove import admin_key
 from States.states import AdminState, AdminRemoveState
 from Database.write_database import write_db
+from Database.delete_database import delete_db
 
 router = Router()
 
@@ -71,3 +72,13 @@ async def add_video_handler(message: Message, state: FSMContext):
 
     else:
         await message.answer("Video jo'nating")
+
+
+@router.message(AdminRemoveState.id)
+async def remove_all_handler(message:Message):
+    id = message.text
+    if id.isdigit():
+        delete_db(id)
+        await message.answer("Muvaffaqiyatli o'chirildi!")
+    else:
+        await message.answer("Video idsini kiriting / (123)")

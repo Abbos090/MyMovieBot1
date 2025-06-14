@@ -1,6 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message
 
+
 from Database.load_database import read_vide_db
 
 router = Router()
@@ -8,11 +9,18 @@ router = Router()
 @router.message(F.text.isdigit())
 async def send_video_handler(message: Message):
     id = message.text
-    video_id = read_vide_db(id)
+    data = read_vide_db(id)
 
-    if video_id:  # agar topilgan bo‘lsa
+    if data:
         try:
-            await message.answer_video(video=video_id)
+            name = data['name']
+            category = data['category']
+            video_id = data['video_id']
+            captions = (
+                f"🎬 {name}\n"
+                f"💎 {category}\n"
+            )
+            await message.answer_video(video=video_id, caption=captions)
         except Exception as e:
             await message.answer(f"Xatolik yuz berdi: {e}")
     else:
