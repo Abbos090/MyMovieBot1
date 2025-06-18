@@ -4,7 +4,9 @@ class AdminState(StatesGroup):
     admin = State()
     id = State()
     name = State()
+    year = State()
     Category = State()
+    language = State()
     video = State()
 
 class AdminRemoveState(StatesGroup):

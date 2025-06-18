@@ -2,12 +2,14 @@ from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from aiogram.filters import CommandStart
+from aiogram.types import ReplyKeyboardRemove
 
 from config import ADMINS
 from Keyboards.add_remove import admin_key
 from States.states import AdminState, AdminRemoveState
 from Database.write_database import write_db
 from Database.delete_database import delete_db
+from Keyboards.languages import languages
 
 router = Router()
 
@@ -44,17 +46,36 @@ async def add_id_handler(message: Message, state: FSMContext):
 async def add_name_handler(message: Message, state: FSMContext):
     name = message.text
     await message.answer("Name qabul qilindi")
-    await message.answer("Kino janrini kiriting")
+    await message.answer("Kino ishlab chiqarilgan yilni kiriting")
     await state.update_data(name=name)
-    await state.set_state(AdminState.Category)
+    await state.set_state(AdminState.year)
+
+@router.message(AdminState.year)
+async def add_year_handler(message: Message, state: FSMContext):
+    year = message.text
+    if year.isdigit():
+        await message.answer("Yil qabul qilindi")
+        await message.answer("Kino janrini kiriting")
+        await state.update_data(year=year)
+        await state.set_state(AdminState.Category)
+    else:
+        await message.answer("iltimos yil kiriting !")
 
 
 @router.message(AdminState.Category)
 async def add_Category_handler(message: Message, state: FSMContext):
     category = message.text
     await message.answer("category qabul qilindi")
-    await message.answer("Video jo'nating")
+    await message.answer("Video tilini jo'nating", reply_markup=languages)
     await state.update_data(category=category)
+    await state.set_state(AdminState.language)
+
+@router.message(AdminState.language)
+async def add_language_handler(message: Message, state: FSMContext):
+    language = message.text
+    await message.answer("Til qabul qilindi", reply_markup=ReplyKeyboardRemove())
+    await message.answer("Video jo'nating")
+    await state.update_data(language=language)
     await state.set_state(AdminState.video)
 
 
@@ -63,6 +84,8 @@ async def add_video_handler(message: Message, state: FSMContext):
     video = message.video
     if video:
         await message.answer("Video qabul qilindi!")
+        duration_sec = message.video.duration
+        await state.update_data(sec=duration_sec)
         await state.update_data(video_id=video.file_id)
         data = await state.get_data()
         write_db(data)
