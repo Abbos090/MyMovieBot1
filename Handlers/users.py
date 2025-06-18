@@ -15,6 +15,7 @@ async def send_video_handler(message: Message):
         try:
             name = data['name']
             year = data['year']
+            qism = data['qism']
             sec = int(data['sec'])
             category = data['category']
             language = data['language']
@@ -25,9 +26,20 @@ async def send_video_handler(message: Message):
             second = sec % 60
             hour = minute // 60
             minute %= 60
+
+            qism_ls = qism.split()
+            fasl = 0
+            qism = 0
+            if len(qism_ls) > 1:
+                fasl = qism_ls[0]
+                qism = qism_ls[1]
+            elif len(qism_ls) == 1:
+                fasl = "1"
+                qism = qism_ls[0]
+
             captions = (
                 f"🎬 {name}\n"
-                f"{id}-qism, 1-fasl\n\n"
+                f"{fasl}-fasl, {qism}-qism\n\n"
                 f"📆 {year}\n"
                 f"🕜 {hour} soat {minute} daqiqa, {second} soniya\n"
                 f"💎 {category}\n"

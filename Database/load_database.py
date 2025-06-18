@@ -4,7 +4,7 @@ def read_vide_db(id):
     conn = psycopg2.connect("dbname=postgres user=postgres password=1221")
     cur = conn.cursor()
 
-    query = "SELECT name, year, sec, category, language, video_id FROM admin WHERE id = %s;"
+    query = "SELECT name, qism, year, sec, category, language, video_id FROM serials WHERE id = %s;"
     cur.execute(query, (id,))
     row = cur.fetchone()
 
@@ -14,11 +14,12 @@ def read_vide_db(id):
     if row:
         return {
             'name' : row[0],
-            'year' : row[1],
-            'sec' : row[2],
-            'category' : row[3],
-            'language' : row[4],
-            'video_id' : row[5],
+            'qism' : row[1],
+            'year' : row[2],
+            'sec' : row[3],
+            'category' : row[4],
+            'language' : row[5],
+            'video_id' : row[6],
         }
 
     return None

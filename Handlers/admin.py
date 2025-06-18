@@ -46,8 +46,16 @@ async def add_id_handler(message: Message, state: FSMContext):
 async def add_name_handler(message: Message, state: FSMContext):
     name = message.text
     await message.answer("Name qabul qilindi")
-    await message.answer("Kino ishlab chiqarilgan yilni kiriting")
+    await message.answer("Serialni fasl va qismini kiriting. Masalan: (1 32)")
     await state.update_data(name=name)
+    await state.set_state(AdminState.qism)
+
+@router.message(AdminState.qism)
+async def add_qism_handler(message: Message, state: FSMContext):
+    qism = message.text
+    await message.answer("Qism qabul qilindi")
+    await message.answer("Kino ishlab chiqarilgan yilni kiriting")
+    await state.update_data(qism=qism)
     await state.set_state(AdminState.year)
 
 @router.message(AdminState.year)

@@ -4,6 +4,7 @@ class AdminState(StatesGroup):
     admin = State()
     id = State()
     name = State()
+    qism = State()
     year = State()
     Category = State()
     language = State()
