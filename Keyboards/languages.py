@@ -7,5 +7,4 @@ languages = ReplyKeyboardMarkup(
         [KeyboardButton(text="Rus")],
     ],
     resize_keyboard=True,
-    one_time_keyboard=True
 )

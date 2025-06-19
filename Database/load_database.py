@@ -24,3 +24,16 @@ def read_vide_db(id):
 
     return None
 
+def read_qism_db(id):
+    conn = psycopg2.connect("dbname=postgres user=postgres password=1221")
+    cur = conn.cursor()
+
+    query = "SELECT name, qism, year, sec, category, language, video_id FROM serials WHERE id = %s;"
+    cur.execute(query, (id,))
+    row = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if row:
+        return
